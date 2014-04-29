@@ -5,34 +5,44 @@ WORKSTATION=`pwd`
 # 初始化环境变量
 echo "正在设置环境变量..."
 
-echo -e "export BLADE_AUTO_UPGRADE=no" >> ~/.bashrc
-echo -e "export PATH=\$PATH:$WORKSTATION/tools/bin:$WORKSTATION/tools/typhoon-blade" >> ~/.bashrc
-source ~/.bashrc
+if ! [[ `cat ~/.bashrc | grep BLADE_AUTO_UPGRADE` ]]; then
+	echo -e "export BLADE_AUTO_UPGRADE=no" >> ~/.bashrc
+	echo -e "export PATH=\$PATH:$WORKSTATION/tools/bin:$WORKSTATION/tools/typhoon-blade" >> ~/.bashrc
+	source ~/.bashrc
+fi
 
 # 下载工具集
 echo "正在下载工具集..."
 
 # typhoon-blade
-echo "[下载] typhoon-blade..."
-git clone https://github.com/chen3feng/typhoon-blade.git ./tools/typhoon-blade/
+if ! test -d ./tools/typhoon-blade; then
+	echo "[下载] typhoon-blade..."
+	git clone https://github.com/chen3feng/typhoon-blade.git ./tools/typhoon-blade/
+fi
 
 # 下载第三方库
 echo "正在下载第三方函数库..."
 
 # boost
-echo "[下载] libboost..."
-git clone https://github.com/mirror/boost.git ./thirdparty/boost/
+if ! test -d ./thirdparty/boost; then
+	echo "[下载] libboost..."
+	git clone https://github.com/mirror/boost.git ./thirdparty/boost/
+fi
 echo "[编译] libboost..."
 
 # libnindex
-echo "[下载] libnindex..."
-git clone https://github.com/NickeyWoo/libnindex.git ./thirdparty/libnindex/
+if ! test -d ./thirdparty/libnindex; then
+	echo "[下载] libnindex..."
+	git clone https://github.com/NickeyWoo/libnindex.git ./thirdparty/libnindex/
+fi
 echo "[编译] libnindex..."
 make -C ./thirdparty/libnindex/
 
 # libsimplesvr
-echo "[下载] libsimplesvr..."
-git clone https://github.com/NickeyWoo/libsimplesvr.git ./thirdparty/libsimplesvr/
+if ! test -d ./thirdparty/libsimplesvr; then
+	echo "[下载] libsimplesvr..."
+	git clone https://github.com/NickeyWoo/libsimplesvr.git ./thirdparty/libsimplesvr/
+fi
 echo "[编译] libsimplesvr..."
 make -C ./thirdparty/libsimplesvr/
 
