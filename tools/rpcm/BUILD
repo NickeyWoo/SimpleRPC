@@ -8,15 +8,27 @@ cc_binary(
 	name = 'rpcm-tool',
 	srcs = [
 		'rpcm.cc'
+	],
+	deps = [
+		':module-template'
 	]
 )
 
 gen_rule(
 	name = 'rpcm',
 	cmd = 'cp ./blade-bin/tools/rpcm/rpcm-tool ./tools/bin/rpcm',
-	deps = [':rpcm-tool'],
+	deps = [
+		':rpcm-tool',
+	],
 	outs = ['./tools/bin/rpcm']
 )
 
+resource_library(
+	name = 'module-template',
+	srcs = [
+		'BUILD.template',
+		'service.cc.template'
+	]
+)
 
 

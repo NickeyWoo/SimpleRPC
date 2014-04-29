@@ -1,0 +1,13 @@
+#
+# blade BUILD
+# this file is auto create, do not modify it.
+# create by rpcm
+#
+
+cc_binary(
+	name = '%%MODULE_NAME%%'
+	srcs = [
+		'service.cc'
+	]
+)
+
