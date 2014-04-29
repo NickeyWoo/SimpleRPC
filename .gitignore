@@ -24,4 +24,5 @@
 build*
 *-bin
 .Building.lock
+.*
 
