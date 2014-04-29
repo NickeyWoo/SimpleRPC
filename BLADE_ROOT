@@ -1,0 +1,33 @@
+# 
+# BLADE_ROOT
+# 2014/04/29
+# nickeywoo
+# 
+
+cc_config(
+	extra_incs = [
+		'thirdparty/libnindex/include/',
+		'thirdparty/libsimplesvr/include/'
+	],
+	linkflags = [
+		'-L./thirdparty/libnindex/lib/',
+		'-L./thirdparty/libsimplesvr/libs/',
+		'-L/usr/lib64/'
+	],
+	warnings = ['-Wall'],
+	c_warnings = ['-Wall'],
+	cxxflags = ['-DDEBUG'],
+	cflags = ['-DDEBUG'],
+	optimize = '-O2'
+)
+
+cc_binary_config(
+	extra_libs = [
+		'#m',
+		'#crypto',
+		'#boost_regex',
+		'#rt'
+	]
+)
+
+
