@@ -7,11 +7,15 @@
 cc_config(
 	extra_incs = [
 		'thirdparty/libnindex/include/',
-		'thirdparty/libsimplesvr/include/'
+		'thirdparty/libsimplesvr/include/',
+		'thirdparty/protobuf/include/',
+		'thirdparty/boost/include/'
 	],
 	linkflags = [
 		'-L./thirdparty/libnindex/lib/',
 		'-L./thirdparty/libsimplesvr/libs/',
+		'-L./thirdparty/protobuf/lib/',
+		'-L./thirdparty/boost/lib/',
 		'-L/usr/lib64/'
 	],
 	warnings = ['-Wall'],
@@ -29,5 +33,11 @@ cc_binary_config(
 		'#rt'
 	]
 )
+
+proto_library_config(
+	protoc = 'protoc',
+	protobuf_libs = '#protobuf'
+)
+
 
 

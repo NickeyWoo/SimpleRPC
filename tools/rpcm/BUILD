@@ -26,8 +26,8 @@ gen_rule(
 resource_library(
 	name = 'module-template',
 	srcs = [
-		'BUILD.template',
-		'service.cc.template'
+		'templates/BUILD.template',
+		'templates/service.cc.template'
 	]
 )
 

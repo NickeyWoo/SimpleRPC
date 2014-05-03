@@ -2,49 +2,85 @@
 
 WORKSTATION=`pwd`
 
-# 初始化环境变量
-if ! [[ `cat ~/.bashrc | grep BLADE_AUTO_UPGRADE` ]]; then
-	echo "正在设置环境变量..."
-	echo -e "export BLADE_AUTO_UPGRADE=no" >> ~/.bashrc
-	echo -e "export PATH=\$PATH:$WORKSTATION/tools/bin:$WORKSTATION/tools/typhoon-blade" >> ~/.bashrc
-	export BLADE_AUTO_UPGRADE=no
-	export PATH=\$PATH:$WORKSTATION/tools/bin:$WORKSTATION/tools/typhoon-blade
-fi
-
-# 下载工具集
-echo "准备工具集..."
-
-# typhoon-blade
-if ! test -d ./tools/typhoon-blade; then
-	echo "[下载] typhoon-blade..."
-	git clone https://github.com/chen3feng/typhoon-blade.git ./tools/typhoon-blade/
-fi
-
-# 下载第三方库
+# 准备第三方库
 echo "准备第三方函数库..."
+cd thirdparty
+
+# protobuf
+if ! test -d ./protobuf; then
+	echo "[下载] protobuf ..."
+	wget http://protobuf.googlecode.com/files/protobuf-2.5.0.tar.gz -O ./protobuf-2.5.0.tar.gz
+	echo "[编译] protobuf ..."
+	tar -zxvf ./protobuf-2.5.0.tar.gz
+	cd protobuf-2.5.0 
+	./configure --enable-shared=no --prefix=$WORKSTATION/thirdparty/protobuf
+	make
+	make install
+	cd ..
+	rm -rf ./protobuf-2.5.0*
+fi
 
 # boost
-if ! test -d ./thirdparty/boost; then
-	echo "[下载] libboost..."
-	git clone https://github.com/mirror/boost.git ./thirdparty/boost/
+if ! test -d ./boost; then
+	echo "[下载] libboost ..."
+	wget http://sourceforge.net/projects/boost/files/boost/1.55.0/boost_1_55_0.tar.gz/download -O boost_1_55_0.tar.gz
+	echo "[编译] libboost ..."
+	tar -zxvf ./boost_1_55_0.tar.gz
+	cd boost_1_55_0
+	./bootstrap.sh
+	./b2 --prefix=$WORKSTATION/thirdparty/boost link=static runtime-link=static install
+	cd ..
+	rm -rf ./boost_1_55_0*
 fi
-echo "[编译] libboost..."
 
 # libnindex
-if ! test -d ./thirdparty/libnindex; then
-	echo "[下载] libnindex..."
-	git clone https://github.com/NickeyWoo/libnindex.git ./thirdparty/libnindex/
+if ! test -d ./libnindex; then
+	echo "[下载] libnindex ..."
+	git clone https://github.com/NickeyWoo/libnindex.git ./libnindex/
+	echo "[编译] libnindex ..."
+	make -C ./libnindex/
 fi
-echo "[编译] libnindex..."
-make -C ./thirdparty/libnindex/
 
 # libsimplesvr
-if ! test -d ./thirdparty/libsimplesvr; then
-	echo "[下载] libsimplesvr..."
-	git clone https://github.com/NickeyWoo/libsimplesvr.git ./thirdparty/libsimplesvr/
+if ! test -d ./libsimplesvr; then
+	echo "[下载] libsimplesvr ..."
+	git clone https://github.com/NickeyWoo/libsimplesvr.git ./libsimplesvr/
+	echo "[编译] libsimplesvr ..."
+	make -C ./libsimplesvr/
 fi
-echo "[编译] libsimplesvr..."
-make -C ./thirdparty/libsimplesvr/
 
+cd ..
+# 第三方库准备完毕
+
+# 准备工具集
+echo "准备工具集..."
+cd tools
+
+# typhoon-blade
+if ! test -d ./typhoon-blade; then
+	echo "[下载] typhoon-blade ..."
+	git clone https://github.com/chen3feng/typhoon-blade.git ./typhoon-blade/
+fi
+
+if ! test -f ./bin/rpcm; then
+	echo "[编译] rpcm ..."
+	blade build rpcm
+fi
+
+cd ..
+# 工具集准备完毕
+
+# 初始化环境变量
+echo "初始化环境变量..."
+if ! [[ `cat ~/.bashrc | grep BLADE_AUTO_UPGRADE` ]]; then
+	echo -e "export BLADE_AUTO_UPGRADE=no" >> ~/.bashrc
+	echo -e "export PATH=\$PATH:$WORKSTATION/tools/bin:$WORKSTATION/tools/typhoon-blade:$WORKSTATION/thirdparty/protobuf/bin" >> ~/.bashrc
+	echo -e "test -s $WORKSTATION/tools/typhoon-blade/bladefunctions && . $WORKSTATION/tools/typhoon-blade/bladefunctions || true" >> ~/.bashrc
+	export BLADE_AUTO_UPGRADE=no
+	export PATH=$PATH:$WORKSTATION/tools/bin:$WORKSTATION/tools/typhoon-blade:$WORKSTATION/thirdparty/protobuf/bin
+	test -s $WORKSTATION/tools/typhoon-blade/bladefunctions && . $WORKSTATION/tools/typhoon-blade/bladefunctions || true
+fi
+
+echo "SimpleRPC 安装完毕"
 
 
