@@ -29,6 +29,7 @@ cc_binary_config(
 	extra_libs = [
 		'#nindex',
 		'#simplesvr',
+		'#protobuf',
 		'#m',
 		'#crypto',
 		'#boost_regex',
