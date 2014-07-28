@@ -1,10 +1,10 @@
 #!/bin/sh
 
-WORKSTATION=`pwd`
+WORKSTATION=`dirname $0`
 
 # 准备第三方库
 echo "准备第三方函数库..."
-cd thirdparty
+cd $WORKSTATION/thirdparty
 
 # protobuf
 if ! test -d ./protobuf; then
@@ -18,6 +18,7 @@ if ! test -d ./protobuf; then
 	make install
 	cd ..
 	rm -rf ./protobuf-2.5.0*
+	cp ./protobuf/bin/* ../Tools/bin/
 fi
 
 # boost
@@ -54,17 +55,22 @@ cd ..
 
 # 准备工具集
 echo "准备工具集..."
-cd tools
+cd Tools
 
 # typhoon-blade
 if ! test -d ./typhoon-blade; then
 	echo "[下载] typhoon-blade ..."
 	git clone https://github.com/chen3feng/typhoon-blade.git ./typhoon-blade/
+	ln -s ./typhoon-blade/blade ./bin/
 fi
 
-if ! test -f ./bin/rpcm; then
-	echo "[编译] rpcm ..."
-	blade build rpcm
+#protoc-gen-rpc
+if ! test -d ./protoc-gen-rpc; then
+	echo "[下载] protoc-gen-rpc ..."
+	git clone https://github.com/NickeyWoo/protoc-gen-rpc.git ./protoc-gen-rpc/
+	echo "[编译] protoc-gen-rpc ..."
+	make -C ./protoc-gen-rpc/
+	cp ./protoc-gen-rpc/bin/* ./bin/
 fi
 
 cd ..
@@ -74,11 +80,9 @@ cd ..
 echo "初始化环境变量..."
 if ! [[ `cat ~/.bashrc | grep BLADE_AUTO_UPGRADE` ]]; then
 	echo -e "export BLADE_AUTO_UPGRADE=no" >> ~/.bashrc
-	echo -e "export PATH=\$PATH:$WORKSTATION/tools/bin:$WORKSTATION/tools/typhoon-blade:$WORKSTATION/thirdparty/protobuf/bin" >> ~/.bashrc
-	echo -e "test -s $WORKSTATION/tools/typhoon-blade/bladefunctions && . $WORKSTATION/tools/typhoon-blade/bladefunctions || true" >> ~/.bashrc
-	export BLADE_AUTO_UPGRADE=no
-	export PATH=$PATH:$WORKSTATION/tools/bin:$WORKSTATION/tools/typhoon-blade:$WORKSTATION/thirdparty/protobuf/bin
-	test -s $WORKSTATION/tools/typhoon-blade/bladefunctions && . $WORKSTATION/tools/typhoon-blade/bladefunctions || true
+	echo -e "export PATH=\$PATH:$WORKSTATION/Tools/bin" >> ~/.bashrc
+	echo -e "test -s $WORKSTATION/Tools/typhoon-blade/bladefunctions && . $WORKSTATION/Tools/typhoon-blade/bladefunctions || true" >> ~/.bashrc
+	source ~/.bashrc
 fi
 
 echo "SimpleRPC 安装完毕"
