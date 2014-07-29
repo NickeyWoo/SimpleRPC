@@ -28,7 +28,7 @@ create() {
 	# check service directory
 	if [ -d $2 ]
 	then
-		echo "$2 service already exists"
+		echo "Error: $2 service already exists"
 		exit 2
 	fi
 
@@ -64,9 +64,44 @@ clean() {
 	echo "Clean $2 Service Success"
 }
 
+proj_base() {
+	PROJ_BASEPATH=$1
+	TEST="$PROJ_BASEPATH/BLADE_ROOT"
+	while ! ([ -f $TEST ])
+	do
+		PROJ_BASEPATH=`dirname $PROJ_BASEPATH`
+		if [ $PROJ_BASEPATH = "/" ]
+		then
+			echo "Error: not found project BLADE_ROOT"
+			exit 2
+		fi
+		TEST="$PROJ_BASEPATH/BLADE_ROOT"
+	done
+}
+
 build() {
-	SERVICE_PATH=`pwd`
-	echo $SERVICE_PATH
+	SERVICE_BASEPATH=`pwd`
+	proj_base $SERVICE_BASEPATH
+	SERVICE_NAME=`basename $SERVICE_BASEPATH`
+	SERVICE_PROTO="$SERVICE_NAME.proto"
+
+	# check proto file
+	if ! ([ -f $SERVICE_PROTO ])
+	then
+		echo "Error: not found $SERVICE_PROTO file"
+		exit 1
+	fi
+
+	TEMPLATE_PATH="$PROJ_BASEPATH/RPCCommon/RPCTemplate/libsimplesvr"
+	if ! ( [ -d $TEMPLATE_PATH ] )
+	then
+		echo "Error: not found $TEMPLATE_PATH"
+		exit 3
+	fi
+
+	rpc build $SERVICE_PROTO $TEMPLATE_PATH -I. -I$PROJ_BASEPATH -I"$PROJ_BASEPATH/thirdparty/protobuf/include"
+
+	echo "generator success"
 }
 
 case "$1" in
