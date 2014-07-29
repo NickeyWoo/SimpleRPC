@@ -1,0 +1,79 @@
+#!/bin/sh
+
+#
+# SCRIPT: s
+# AUTHOR: nickeywoo <thenickey@gmail.com>
+# DATE: 2014/7/27
+#
+
+usage() {
+	echo "Usage: s [create|clean|build|help]"
+	echo "RPC Service Toolkit"
+	echo "Options:"
+	echo "	create [service name]   create service proto"
+	echo "	clean [service name]    clean service"
+	echo "	build                   generator service code"
+	echo "	help                    print help information"
+	echo ""
+}
+
+create() {
+	# check parameters
+	if [ $# -lt 2 ]
+	then
+		echo "Usage: s create [service name]"
+		exit 1
+	fi
+
+	# check service directory
+	if [ -d $2 ]
+	then
+		echo "$2 service already exists"
+		exit 2
+	fi
+
+	DATE=`date +%D`
+	mkdir $2
+
+	echo "//" >> $2/$2.proto
+	echo "//   $2 Service" >> $2/$2.proto
+	echo "//" >> $2/$2.proto
+	echo "//   DESCRIPTION: " >> $2/$2.proto
+	echo "//   AUTHOR: " >> $2/$2.proto
+	echo "//   DATE: $DATE" >> $2/$2.proto
+	echo "//" >> $2/$2.proto
+	echo "" >> $2/$2.proto
+	echo "import \"RPCProto/RPCService.proto\";" >> $2/$2.proto
+	echo "" >> $2/$2.proto
+	echo "" >> $2/$2.proto
+
+	echo "Create $2 Service Success"
+}
+
+clean() {
+	rm -rf $2
+	echo "Clean $2 Service Success"
+}
+
+build() {
+	BASE=`dirname $0`
+	P=`pwd`
+	echo $BASE
+	echo $p
+}
+
+case "$1" in
+	create)
+		create $@
+		;;
+	clean)
+		clean $@
+		;;
+	build)
+		build $@
+		;;
+	*)
+		usage $@
+esac
+
+
