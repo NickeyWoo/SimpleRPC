@@ -19,7 +19,7 @@ message RPCCommand
 	optional string ResultMessage = 3;
 }
 
-message RPCProto
+message RPCProtoHead
 {
 	required uint32 Version = 1;
 	required uint32 Sequence = 2;

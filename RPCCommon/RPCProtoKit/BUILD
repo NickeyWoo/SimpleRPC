@@ -10,6 +10,9 @@ cc_library(
 	name = 'RPCProtoKit',
 	srcs = [
 		'RPCProtoKit.cc',
+	],
+	deps = [
+		'//RPCProto:RPCProto'
 	]
 )
 
