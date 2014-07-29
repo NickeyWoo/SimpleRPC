@@ -10,10 +10,10 @@ usage() {
 	echo "Usage: s [create|clean|build|help]"
 	echo "RPC Service Toolkit"
 	echo "Options:"
-	echo "	create [service name]   create service proto"
-	echo "	clean [service name]    clean service"
-	echo "	build                   generator service code"
-	echo "	help                    print help information"
+	echo "  create [service name]   create service proto"
+	echo "  clean [service name]    clean service"
+	echo "  build                   generator service code"
+	echo "  help                    print help information"
 	echo ""
 }
 
@@ -45,7 +45,16 @@ create() {
 	echo "" >> $2/$2.proto
 	echo "import \"RPCProto/RPCService.proto\";" >> $2/$2.proto
 	echo "" >> $2/$2.proto
+	echo "option(Author} = \"\";" >> $2/$2.proto
 	echo "" >> $2/$2.proto
+	echo "service $2 {" >> $2/$2.proto
+	echo "" >> $2/$2.proto
+	echo "" >> $2/$2.proto
+	echo "}" >> $2/$2.proto
+	echo "" >> $2/$2.proto
+	echo "" >> $2/$2.proto
+
+	echo ".swp" >> $2/.gitignore
 
 	echo "Create $2 Service Success"
 }
@@ -56,10 +65,8 @@ clean() {
 }
 
 build() {
-	BASE=`dirname $0`
-	P=`pwd`
-	echo $BASE
-	echo $p
+	SERVICE_PATH=`pwd`
+	echo $SERVICE_PATH
 }
 
 case "$1" in

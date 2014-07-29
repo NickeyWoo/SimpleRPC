@@ -35,7 +35,7 @@ const char* RPCServiceException::what() const throw()
 }
 
 RPCUnknownProtocolException::RPCUnknownProtocolException(std::string strErrorMessage) :
-	RPCServiceException(0x01, strErrorMessage)
+	RPCServiceException(E_UNKNOWNPROTOCOL, strErrorMessage)
 {
 }
 

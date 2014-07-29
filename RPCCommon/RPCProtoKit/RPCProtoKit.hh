@@ -22,8 +22,14 @@
 #include "IOBuffer.hpp"
 #include "RPCProto/RPCProto.pb.h"
 
+#define RPC_PROTOCOL_VERSION	0x1
+
 #define S_MAGICNO		0x02
 #define E_MAGICNO		0x03
+
+#define E_SUCCESS			0x00
+#define E_UNKNOWNPROTOCOL	0x01
+#define E_UNAVAILABLE		0x02
 
 /*++
  *	RPC Protocol Format:
