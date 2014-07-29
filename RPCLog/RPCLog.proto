@@ -20,8 +20,13 @@ message LogSequence {
 }
 
 service RPCLog {
+
 	rpc Log(LogData) returns(LogSequence) {
-		option(CommandCode) = "0xE521";
+		option(CommandCode) = "0xE520";
+	}
+
+	rpc Echo(LogData) returns(LogData) {
+		option(CommandCode) = "0xE530";
 	}
 }
 
