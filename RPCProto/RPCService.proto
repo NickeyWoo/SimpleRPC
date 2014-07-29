@@ -1,0 +1,20 @@
+//
+//   RPC Service
+//
+//   DESCRIPTION: 
+//   AUTHOR: NickeyWoo <thenickey@gmail.com>
+//   DATE: 2014/07/18
+//
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.FileOptions {
+    optional string Author = 5001;
+}
+
+extend google.protobuf.MethodOptions {
+    optional string CommandCode = 7001;
+}
+
+
+

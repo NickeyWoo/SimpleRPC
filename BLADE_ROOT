@@ -1,8 +1,10 @@
-# 
-# BLADE_ROOT
-# 2014/04/29
-# nickeywoo
-# 
+#
+#   RPC BLADE_ROOT
+#
+#   DESCRIPTION: 
+#   AUTHOR: NickeyWoo <thenickey@gmail.com>
+#   DATE: 2014/07/18
+#
 
 cc_config(
 	extra_incs = [
@@ -40,7 +42,10 @@ cc_binary_config(
 
 proto_library_config(
 	protoc = 'protoc',
-	protobuf_libs = '#protobuf'
+	protobuf_libs = '#protobuf',
+	protobuf_incs = [
+		'thirdparty/protobuf/include/'
+	]
 )
 
 

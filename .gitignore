@@ -28,4 +28,6 @@ build*
 
 # project
 *.swp
+build
+blade-bin
 

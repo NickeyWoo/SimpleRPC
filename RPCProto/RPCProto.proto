@@ -1,0 +1,33 @@
+//
+//   RPC Protocol
+//
+//   DESCRIPTION: 
+//   AUTHOR: NickeyWoo <thenickey@gmail.com>
+//   DATE: 2014/07/18
+//
+
+message RPCApplication
+{
+	required string ID = 1;
+	required string Password = 2;
+}
+
+message RPCCommand
+{
+	required uint32 CommandCode = 1;
+	required uint32 ResultCode = 2;
+	optional string ResultMessage = 3;
+}
+
+message RPCProto
+{
+	required uint32 Version = 1;
+	required uint32 Sequence = 2;
+	required uint64 Timestamp = 3;
+
+	required RPCCommand Command = 10;
+	optional RPCApplication Application = 11;
+}
+
+
+

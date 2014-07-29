@@ -1,6 +1,6 @@
 #!/bin/sh
 
-WORKSTATION=`dirname $0`
+WORKSTATION=`pwd`
 
 # 准备第三方库
 echo "准备第三方函数库..."
@@ -9,7 +9,7 @@ cd $WORKSTATION/thirdparty
 # protobuf
 if ! test -d ./protobuf; then
 	echo "[下载] protobuf ..."
-	wget http://protobuf.googlecode.com/files/protobuf-2.5.0.tar.gz -O ./protobuf-2.5.0.tar.gz
+	wget https://protobuf.googlecode.com/files/protobuf-2.5.0.tar.gz -O ./protobuf-2.5.0.tar.gz
 	echo "[编译] protobuf ..."
 	tar -zxvf ./protobuf-2.5.0.tar.gz
 	cd protobuf-2.5.0 
@@ -61,7 +61,6 @@ cd Tools
 if ! test -d ./typhoon-blade; then
 	echo "[下载] typhoon-blade ..."
 	git clone https://github.com/chen3feng/typhoon-blade.git ./typhoon-blade/
-	ln -s ./typhoon-blade/blade ./bin/
 fi
 
 #protoc-gen-rpc
@@ -80,9 +79,11 @@ cd ..
 echo "初始化环境变量..."
 if ! [[ `cat ~/.bashrc | grep BLADE_AUTO_UPGRADE` ]]; then
 	echo -e "export BLADE_AUTO_UPGRADE=no" >> ~/.bashrc
-	echo -e "export PATH=\$PATH:$WORKSTATION/Tools/bin" >> ~/.bashrc
+	echo -e "export PATH=\$PATH:$WORKSTATION/Tools/bin:$WORKSTATION/Tools/typhoon-blade/" >> ~/.bashrc
 	echo -e "test -s $WORKSTATION/Tools/typhoon-blade/bladefunctions && . $WORKSTATION/Tools/typhoon-blade/bladefunctions || true" >> ~/.bashrc
-	source ~/.bashrc
+	export BLADE_AUTO_UPGRADE=no
+	export PATH=$PATH:$WORKSTATION/Tools/bin:$WORKSTATION/Tools/typhoon-blade/
+	test -s $WORKSTATION/Tools/typhoon-blade/bladefunctions && . $WORKSTATION/Tools/typhoon-blade/bladefunctions || true
 fi
 
 echo "SimpleRPC 安装完毕"
