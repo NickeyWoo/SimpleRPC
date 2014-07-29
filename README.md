@@ -1,7 +1,7 @@
-Simple RPC Service
+Simple RPC Framework
 ===========
 
-Simple RPC Service Framework
+SimpleRPC is a Simple RPC Framework.
 
 
 
