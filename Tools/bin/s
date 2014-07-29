@@ -45,7 +45,7 @@ create() {
 	echo "" >> $2/$2.proto
 	echo "import \"RPCProto/RPCService.proto\";" >> $2/$2.proto
 	echo "" >> $2/$2.proto
-	echo "option(Author} = \"\";" >> $2/$2.proto
+	echo "option(Author) = \"\";" >> $2/$2.proto
 	echo "" >> $2/$2.proto
 	echo "service $2 {" >> $2/$2.proto
 	echo "" >> $2/$2.proto
