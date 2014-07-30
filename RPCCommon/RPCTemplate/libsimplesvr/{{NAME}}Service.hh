@@ -19,7 +19,7 @@
 
 #include "RPCProto/RPCProto.pb.h"
 #include "RPCCommon/RPCProtoKit/RPCProtoKit.hh"
-{{#PROTOLIB}}#include "{{NAME}}/{{PROTOLIB_NAME}}.pb.h"{{/PROTOLIB}}
+{{#PROTOLIB}}#include "{{#DATA}}{{SERVICEPATH}}/{{/DATA}}{{PROTOLIB_NAME}}.pb.h"{{/PROTOLIB}}
 
 {{#PACKAGES}}namespace {{PACKAGE_NAME}} {
 {{/PACKAGES}}

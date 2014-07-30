@@ -13,6 +13,7 @@ usage() {
 	echo "  create [service name]   create service proto"
 	echo "  clean [service name]    clean service"
 	echo "  build                   generator service code"
+	echo "  dump                   	dump service dictionary"
 	echo "  help                    print help information"
 	echo ""
 }
@@ -84,6 +85,7 @@ build() {
 	proj_base $SERVICE_BASEPATH
 	SERVICE_NAME=`basename $SERVICE_BASEPATH`
 	SERVICE_PROTO="$SERVICE_NAME.proto"
+	SERVICEPATH=${SERVICE_BASEPATH:$((${#PROJ_BASEPATH}+1))}
 
 	# check proto file
 	if ! ([ -f $SERVICE_PROTO ])
@@ -99,9 +101,26 @@ build() {
 		exit 3
 	fi
 
-	rpc build $SERVICE_PROTO $TEMPLATE_PATH -I. -I$PROJ_BASEPATH -I"$PROJ_BASEPATH/thirdparty/protobuf/include"
+	rpc build --proto=$SERVICE_PROTO --data="SERVICEPATH:$SERVICEPATH" --template=$TEMPLATE_PATH -I. -I$PROJ_BASEPATH -I"$PROJ_BASEPATH/thirdparty/protobuf/include"
 
 	echo "generator success"
+}
+
+dump() {
+	SERVICE_BASEPATH=`pwd`
+	proj_base $SERVICE_BASEPATH
+	SERVICE_NAME=`basename $SERVICE_BASEPATH`
+	SERVICE_PROTO="$SERVICE_NAME.proto"
+	SERVICEPATH=${SERVICE_BASEPATH:$((${#PROJ_BASEPATH}+1))}
+
+	# check proto file
+	if ! ([ -f $SERVICE_PROTO ])
+	then
+		echo "Error: not found $SERVICE_PROTO file"
+		exit 1
+	fi
+
+	rpc dump --proto=$SERVICE_PROTO --data="SERVICEPATH:$SERVICEPATH" -I. -I$PROJ_BASEPATH -I"$PROJ_BASEPATH/thirdparty/protobuf/include"
 }
 
 case "$1" in
@@ -113,6 +132,9 @@ case "$1" in
 		;;
 	build)
 		build $@
+		;;
+	dump)
+		dump $@
 		;;
 	*)
 		usage $@
