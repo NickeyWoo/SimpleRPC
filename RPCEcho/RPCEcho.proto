@@ -1,0 +1,29 @@
+//
+//   RPCEcho Service
+//
+//   DESCRIPTION: 
+//   AUTHOR: NickeyWoo <thenickey@gmail.com>
+//   DATE: 07/30/14
+//
+
+import "RPCProto/RPCService.proto";
+
+option(Author) = "NickeyWoo";
+
+message EchoRequest {
+	required string Message = 1;
+}
+
+message EchoResponse {
+	required uint32 Sequence = 1;
+}
+
+service RPCEcho {
+
+	rpc Echo(EchoRequest) returns(EchoResponse) {
+		option(CommandCode) = "0xE510";
+	}
+
+}
+
+
