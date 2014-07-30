@@ -8,8 +8,17 @@
 
 import "google/protobuf/descriptor.proto";
 
+enum SocketType {
+	TCP = 0;
+	UDP = 1;
+}
+
 extend google.protobuf.FileOptions {
     optional string Author = 5001;
+}
+
+extend google.protobuf.ServiceOptions {
+	optional SocketType Socket = 6001;
 }
 
 extend google.protobuf.MethodOptions {

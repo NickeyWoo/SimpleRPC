@@ -20,6 +20,7 @@ message LogSequence {
 }
 
 service RPCLog {
+	option(Socket) = TCP;
 
 	rpc Log(LogData) returns(LogSequence) {
 		option(CommandCode) = "0xE520";
