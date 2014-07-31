@@ -55,12 +55,38 @@
 
 	timeval tv;
 	bzero(&tv, sizeof(timeval));
+
+	sockaddr_in addr;
+	bzero(&addr, sizeof(sockaddr_in));
 	do
 	{
 		if(dwRetryTimes > 3)
 			throw RPCServiceException(E_UNAVAILABLE, "service unavailable");
 		else if(dwRetryTimes > 0 || !this->IsConnected())
-			ConnectService();
+		{
+			do
+			{
+				Disconnect();
+
+				if(dwRetryTimes > 0)
+				{
+					// dlb set failure
+				}
+
+				addr.sin_family = PF_INET;
+				addr.sin_addr.s_addr = inet_addr("0.0.0.0");
+				addr.sin_port = htons(1234);
+
+				if(ConnectService(addr))
+					break;
+
+				++dwRetryTimes;
+			}
+			while(dwRetryTimes <= 3);
+
+			if(dwRetryTimes > 3)
+				throw RPCServiceException(E_UNAVAILABLE, "service unavailable");
+		}
 
 		RPCProtocol stRequestMsg;
 		stRequestMsg.Head.set_version(m_dwVersion);
@@ -106,28 +132,15 @@
 }
 
 {{/METHODS}}
-void {{SERVICE_NAME}}::ConnectService()
+bool {{SERVICE_NAME}}::ConnectService(sockaddr_in& addr)
 {
-	uint32_t dwRetryTimes = 0;
+	this->Connect(addr);
+
 	timeval tv;
 	bzero(&tv, sizeof(timeval));
-	do
-	{
-		if(dwRetryTimes > 3)
-			throw RPCServiceException(E_UNAVAILABLE, "service connect timeout");
-		
-		sockaddr_in addr;
-		bzero(&addr, sizeof(sockaddr_in));
-		addr.sin_family = PF_INET;
-		addr.sin_addr.s_addr = inet_addr("0.0.0.0");
-		addr.sin_port = htons(1234);
+	tv.tv_usec = 100000;
 
-		this->Connect(addr);
-
-		tv.tv_usec = 100000;
-		++dwRetryTimes;
-	}
-	while(0 == PoolObject<EventScheduler>::Instance().Wait(this, EventScheduler::PollType::POLLOUT, &tv));
+	return (0 != PoolObject<EventScheduler>::Instance().Wait(this, EventScheduler::PollType::POLLOUT, &tv));
 }
 
 void {{SERVICE_NAME}}::OnMessage(ChannelType& channel, IOBuffer& in)

@@ -29,7 +29,7 @@
 public:
 	{{SERVICE_NAME}}();
 	~{{SERVICE_NAME}}();
-	void ConnectService();
+	bool ConnectService(sockaddr_in& addr);
 
 	{{#METHODS}}{{#OUTPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/OUTPUT_TYPE}} {{METHOD_NAME}}({{#INPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/INPUT_TYPE}}& in);
 	{{/METHODS}}
