@@ -16,6 +16,7 @@
 #include "IOBuffer.hpp"
 #include "Server.hpp"
 #include "TcpClient.hpp"
+#include "LoadBalance.hpp"
 
 #include "RPCProto/RPCProto.pb.h"
 #include "RPCCommon/RPCProtoKit/RPCProtoKit.hh"
@@ -38,8 +39,10 @@ public:
     void OnDisconnected(ChannelType& channel);
 
 private:
+	bool m_bLoadConfigure;
 	uint32_t m_dwVersion;
 	uint64_t m_ddwSequence;
+	LoadBalance<RoutePolicy> m_stLoadBalance;
 };
 
 {{/SERVICES}}{{#PACKAGES}}} // namespace {{PACKAGE_NAME}}

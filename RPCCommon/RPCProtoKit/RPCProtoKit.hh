@@ -28,8 +28,9 @@
 #define E_MAGICNO		0x03
 
 #define E_SUCCESS			0x00
-#define E_UNKNOWNPROTOCOL	0x01
-#define E_UNAVAILABLE		0x02
+#define E_INTERNALERROR		0x01
+#define E_UNKNOWNPROTOCOL	0x02
+#define E_UNAVAILABLE		0x03
 
 /*++
  *	RPC Protocol Format:

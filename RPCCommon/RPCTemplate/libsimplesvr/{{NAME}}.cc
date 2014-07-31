@@ -38,9 +38,11 @@
 {{#PACKAGES}}namespace {{PACKAGE_NAME}} {
 {{/PACKAGES}}
 {{#SERVICES}}{{SERVICE_NAME}}::{{SERVICE_NAME}}() :
+	m_bLoadConfigure(false),
 	m_dwVersion(RPC_PROTOCOL_VERSION),
 	m_ddwSequence(0)
 {
+	m_bLoadConfigure = m_stLoadBalance.LoadConfigure("/etc/SimpleRPC/{{#DATA}}{{SERVICEPATH}}/{{/DATA}}{{NAME}}.conf");
 }
 
 {{SERVICE_NAME}}::~{{SERVICE_NAME}}()
@@ -50,6 +52,9 @@
 
 {{#METHODS}}{{#OUTPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/OUTPUT_TYPE}} {{SERVICE_NAME}}::{{METHOD_NAME}}({{#INPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/INPUT_TYPE}}& in)
 {
+	if(!m_bLoadConfigure)
+		throw RPCServiceException(E_INTERNALERROR, "load RPC configure failure");
+
 	char buffer[65535];
 	uint32_t dwRetryTimes = 0;
 
@@ -69,14 +74,9 @@
 				Disconnect();
 
 				if(dwRetryTimes > 0)
-				{
-					// dlb set failure
-				}
+					m_stLoadBalance.Failure(&addr);
 
-				addr.sin_family = PF_INET;
-				addr.sin_addr.s_addr = inet_addr("0.0.0.0");
-				addr.sin_port = htons(1234);
-
+				m_stLoadBalance.Route(&addr);
 				if(ConnectService(addr))
 					break;
 
@@ -112,7 +112,12 @@
 
 	IOBuffer stInBuf(buffer, 65535);
 	if(this->Recv(stInBuf) == 0)
+	{
+		m_stLoadBalance.Failure(&addr);
 		throw RPCServiceException(E_UNAVAILABLE, "service close connection");
+	}
+	else
+		m_stLoadBalance.Success(&addr);
 
 	RPCProtocol stResponseMsg;
 	stInBuf >> stResponseMsg;
