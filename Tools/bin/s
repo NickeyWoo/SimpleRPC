@@ -101,6 +101,16 @@ build() {
 		exit 3
 	fi
 
+	if [ -f BUILD ]
+	then
+		echo -n "warning: file already exists, do you want to overwrite file? [Y/n]: "
+		read OVERWRITE
+		if [ $OVERWRITE != "Y" ]
+		then
+			exit 0
+		fi
+	fi
+
 	rpc build --proto=$SERVICE_PROTO --data="SERVICEPATH:$SERVICEPATH" --template=$TEMPLATE_PATH -I. -I$PROJ_BASEPATH -I"$PROJ_BASEPATH/thirdparty/protobuf/include"
 
 	echo "generator success"
