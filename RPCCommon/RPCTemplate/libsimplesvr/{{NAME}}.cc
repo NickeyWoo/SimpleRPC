@@ -56,10 +56,8 @@
 		throw RPCServiceException(E_INTERNALERROR, "load RPC configure failure");
 
 	char buffer[65535];
+	IOBuffer stInBuf(buffer, 65535);
 	uint32_t dwRetryTimes = 0;
-
-	timeval tv;
-	bzero(&tv, sizeof(timeval));
 
 	sockaddr_in addr;
 	bzero(&addr, sizeof(sockaddr_in));
@@ -67,25 +65,17 @@
 	{
 		if(dwRetryTimes > 3)
 			throw RPCServiceException(E_UNAVAILABLE, "service unavailable");
-		else if(dwRetryTimes > 0 || !this->IsConnected())
+
+		if(dwRetryTimes > 0 || !this->IsConnected())
 		{
-			do
+			Disconnect();
+			m_stLoadBalance.Route(&addr);
+			if(!ConnectService(addr))
 			{
-				Disconnect();
-
-				if(dwRetryTimes > 0)
-					m_stLoadBalance.Failure(&addr);
-
-				m_stLoadBalance.Route(&addr);
-				if(ConnectService(addr))
-					break;
-
+				m_stLoadBalance.Failure(&addr);
 				++dwRetryTimes;
+				continue;
 			}
-			while(dwRetryTimes <= 3);
-
-			if(dwRetryTimes > 3)
-				throw RPCServiceException(E_UNAVAILABLE, "service unavailable");
 		}
 
 		RPCProtocol stRequestMsg;
@@ -103,21 +93,29 @@
 		stOutBuf << stRequestMsg;
 		this->Send(stOutBuf);
 
+		timeval tv;
+		bzero(&tv, sizeof(timeval));
 		tv.tv_usec = 100000; // 100ms timeout
-		++dwRetryTimes;
+		if(0 == PoolObject<EventScheduler>::Instance().Wait(this, EventScheduler::PollType::POLLIN, &tv))
+		{
+			m_stLoadBalance.Failure(&addr);
+			++dwRetryTimes;
+			continue;
+		}
+
+		if(this->Recv(stInBuf) == 0)
+		{
+			m_stLoadBalance.Failure(&addr);
+			++dwRetryTimes;
+			continue;
+		}
+
+		m_stLoadBalance.Success(&addr);
+		break;
 	}
-	while(0 == PoolObject<EventScheduler>::Instance().Wait(this, EventScheduler::PollType::POLLIN, &tv));
+	while(true);
 
 	++m_ddwSequence;
-
-	IOBuffer stInBuf(buffer, 65535);
-	if(this->Recv(stInBuf) == 0)
-	{
-		m_stLoadBalance.Failure(&addr);
-		throw RPCServiceException(E_UNAVAILABLE, "service close connection");
-	}
-	else
-		m_stLoadBalance.Success(&addr);
 
 	RPCProtocol stResponseMsg;
 	stInBuf >> stResponseMsg;
