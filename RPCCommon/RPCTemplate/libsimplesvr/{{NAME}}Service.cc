@@ -64,7 +64,7 @@
 													  % dwCommandCode).str());
 
                 {{#OUTPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/OUTPUT_TYPE}} stResponseData;
-                On{{METHOD_NAME}}(stRequestData, stResponseData);
+                On{{METHOD_NAME}}(channel, stRequestData, stResponseData);
 
                 stResponseMsg.Head.mutable_command()->set_resultcode(E_SUCCESS);
                 stResponseMsg.Body = stResponseData.SerializeAsString();
@@ -110,7 +110,7 @@ void {{SERVICE_NAME}}Service::OnDisconnected(ChannelType& channel)
 
 }
 
-{{#METHODS}}void {{SERVICE_NAME}}Service::On{{METHOD_NAME}}({{#INPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/INPUT_TYPE}}& in, {{#OUTPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/OUTPUT_TYPE}}& out)
+{{#METHODS}}void {{SERVICE_NAME}}Service::On{{METHOD_NAME}}(ChannelType& channel, {{#INPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/INPUT_TYPE}}& in, {{#OUTPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/OUTPUT_TYPE}}& out)
 {
     // implement rpc logic
 
