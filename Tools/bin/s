@@ -111,6 +111,19 @@ build() {
 		fi
 	fi
 
+	RPC_CONFIG="$PROJ_BASEPATH/etc/SimpleRPC/$SERVICEPATH"
+	mkdir -p $RPC_CONFIG
+
+	DATE=`date +%D`
+	echo "#" >> "$RPC_CONFIG/$SERVICE_NAME.conf"
+	echo "#   $SERVICE_NAME Service Configure" >> "$RPC_CONFIG/$SERVICE_NAME.conf"
+	echo "#" >> "$RPC_CONFIG/$SERVICE_NAME.conf"
+	echo "#   DESCRIPTION: " >> "$RPC_CONFIG/$SERVICE_NAME.conf"
+	echo "#   AUTHOR: " >> "$RPC_CONFIG/$SERVICE_NAME.conf"
+	echo "#   DATE: $DATE" >> "$RPC_CONFIG/$SERVICE_NAME.conf"
+	echo "#" >> "$RPC_CONFIG/$SERVICE_NAME.conf"
+	echo "" >> "$RPC_CONFIG/$SERVICE_NAME.conf"
+
 	rpc build --proto=$SERVICE_PROTO --data="SERVICEPATH:$SERVICEPATH" --template=$TEMPLATE_PATH -I. -I$PROJ_BASEPATH -I"$PROJ_BASEPATH/thirdparty/protobuf/include"
 
 	echo "generator success"
