@@ -1,0 +1,37 @@
+//
+//   RPCGateway Service
+//
+//   DESCRIPTION: 
+//   AUTHOR: NickeyWoo
+//   DATE: 08/06/14
+//
+
+import "RPCProto/RPCService.proto";
+
+option(Author) = "NickeyWoo";
+
+message EndPoint {
+	required uint32 IP = 1;
+	required uint32 Port = 2;
+}
+
+message CommandInfo {
+	required uint32 CommandCode = 1;
+	repeated EndPoint EndPoints = 2;
+}
+
+message CommandSetupInfo {
+	required uint32 CommandCode = 1;
+	required uint32 EndPointCount = 2;
+}
+
+service RPCGateway {
+
+	rpc Setup(CommandInfo) returns(CommandSetupInfo) {
+		option(CommandCode) = "0x1001";
+	}
+	
+
+}
+
+
