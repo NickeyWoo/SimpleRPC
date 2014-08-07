@@ -70,8 +70,8 @@ void RPCGatewayService::OnMessage(ChannelType& channel, IOBuffer& in)
             }
             break;
         default:
-            throw RPCUnknownProtocolException((boost::format("unknown CommandCode(0x%04X)") 
-											  % dwCommandCode).str());
+			{
+			}
             break;
         }
     }
