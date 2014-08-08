@@ -10,11 +10,11 @@ usage() {
 	echo "Usage: s [create|clean|build|help]"
 	echo "RPC Service Toolkit"
 	echo "Options:"
-	echo "  create [service name]   create service proto"
-	echo "  clean [service name]    clean service"
-	echo "  build                   generator service code"
-	echo "  dump                   	dump service dictionary"
-	echo "  help                    print help information"
+	echo "  create [service name]     create service proto"
+	echo "  clean [service name]      clean service"
+	echo "  build [template name]     generator service code"
+	echo "  dump                   	  dump service dictionary"
+	echo "  help                      print help information"
 	echo ""
 }
 
@@ -94,7 +94,13 @@ build() {
 		exit 1
 	fi
 
-	TEMPLATE_PATH="$PROJ_BASEPATH/RPCCommon/RPCTemplate/libsimplesvr"
+	TEMPLATENAME=$2
+	if [ "$TEMPLATENAME" = "" ]
+	then
+		TEMPLATENAME="libsimplesvr"
+	fi
+
+	TEMPLATE_PATH="$PROJ_BASEPATH/RPCCommon/RPCTemplate/$TEMPLATENAME"
 	if ! ( [ -d $TEMPLATE_PATH ] )
 	then
 		echo "Error: not found $TEMPLATE_PATH"
