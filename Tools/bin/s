@@ -13,7 +13,7 @@ usage() {
 	echo "  create [service name]     create service proto"
 	echo "  clean [service name]      clean service"
 	echo "  build [template name]     generator service code"
-	echo "  dump                   	  dump service dictionary"
+	echo "  dump                      dump service dictionary"
 	echo "  help                      print help information"
 	echo ""
 }
