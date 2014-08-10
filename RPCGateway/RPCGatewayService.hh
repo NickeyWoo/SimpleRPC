@@ -4,7 +4,7 @@
  *
  *  DESCRIPTION: 
  *  AUTHOR: NickeyWoo
- *  DATE: 2014/8/9
+ *  DATE: 2014/8/10
  *
 --*/
 #ifndef __RPCGatewaySERVICE_HH__
@@ -15,7 +15,7 @@
 #include "Channel.hpp"
 #include "IOBuffer.hpp"
 #include "Server.hpp"
-#include "TcpServer.hpp"
+#include "UdpServer.hpp"
 
 #include "RPCProto/RPCProto.pb.h"
 #include "RPCCommon/RPCProtoKit/RPCProtoKit.hh"
@@ -23,14 +23,13 @@
 
 
 class RPCGatewayService :
-    public TcpServer<RPCGatewayService, void>
+    public UdpServer<RPCGatewayService, void>
 {
 public:
 	void OnSetup(ChannelType& channel, ::CommandInfo& in, ::CommandSetupInfo& out);
 	
     void OnMessage(ChannelType& channel, IOBuffer& in);
-    void OnConnected(ChannelType& channel);
-    void OnDisconnected(ChannelType& channel);
+
 };
 
 

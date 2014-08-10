@@ -4,7 +4,7 @@
  *
  *  DESCRIPTION: 
  *  AUTHOR: NickeyWoo
- *  DATE: 2014/8/9
+ *  DATE: 2014/8/10
  *
 --*/
 #include <stdio.h>
@@ -91,22 +91,6 @@ void RPCGatewayService::OnMessage(ChannelType& channel, IOBuffer& in)
     IOBuffer out(buffer, 65535);
     out << stResponseMsg;
     channel << out;
-}
-
-void RPCGatewayService::OnConnected(ChannelType& channel)
-{
-    LOG("client [%s:%d] connected.", inet_ntoa(channel.address.sin_addr), ntohs(channel.address.sin_port));
-
-    // client connected service
-
-}
-
-void RPCGatewayService::OnDisconnected(ChannelType& channel)
-{
-    LOG("client [%s:%d] disconnected.", inet_ntoa(channel.address.sin_addr), ntohs(channel.address.sin_port));
-
-    // client connected service
-
 }
 
 void RPCGatewayService::OnSetup(ChannelType& channel, ::CommandInfo& in, ::CommandSetupInfo& out)

@@ -15,13 +15,14 @@ message EchoRequest {
 }
 
 message EchoResponse {
-	required uint32 Sequence = 1;
+	required string Message = 1;
 }
 
 service RPCEcho {
+	option(Socket) = UDP;
 
 	rpc Echo(EchoRequest) returns(EchoResponse) {
-		option(CommandCode) = "0xE510";
+		option(CommandCode) = "0xFF01";
 	}
 
 }

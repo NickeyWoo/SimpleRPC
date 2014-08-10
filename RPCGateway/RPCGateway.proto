@@ -26,6 +26,7 @@ message CommandSetupInfo {
 }
 
 service RPCGateway {
+	option(Socket) = UDP;
 
 	rpc Setup(CommandInfo) returns(CommandSetupInfo) {
 		option(CommandCode) = "0x1001";

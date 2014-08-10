@@ -3,7 +3,7 @@
  *  !!AUTO GENERATE CODE!!
  *
  *  DESCRIPTION: 
- *  AUTHOR: {{#OPTIONS}}{{#OPTION_5001}}{{OPTION_VALUE}}{{/OPTION_5001}}{{/OPTIONS}}
+ *  AUTHOR: {{#FILE_OPTIONS}}{{#OPTION_5001}}{{OPTION_VALUE}}{{/OPTION_5001}}{{/FILE_OPTIONS}}
  *  DATE: {{#DATE}}{{YEAR}}/{{MONTH}}/{{DAY}}{{/DATE}}
  *
 --*/
@@ -46,17 +46,19 @@ class {{NAME}}App :
 public:
     bool Initialize(int argc, char* argv[])
     {
-		{{#SERVICES}}if(!RegisterTcpServer(m_{{SERVICE_NAME}}Service, "{{SERVICE_NAME}}Interface"))
+		{{#SERVICES}}{{#SERVICE_OPTIONS}}{{#OPTION_6001}}{{#OPTION_6001_0}}if(!RegisterTcpServer(m_{{SERVICE_NAME}}Service, "{{SERVICE_NAME}}Interface"))
             return false;
-		
-		{{/SERVICES}}// Initialize code
+		{{/OPTION_6001_0}}{{#OPTION_6001_1}}if(!RegisterUdpServer<{{SERVICE_NAME}}Service>("{{SERVICE_NAME}}Interface"))
+            return false;
+		{{/OPTION_6001_1}}{{/OPTION_6001}}{{/SERVICE_OPTIONS}}{{/SERVICES}}
+		// Initialize code
         
 
         return true;
     }
-
-	{{#SERVICES}}{{SERVICE_NAME}}Service m_{{SERVICE_NAME}}Service;
-	{{/SERVICES}}
+	{{#SERVICES}}{{#SERVICE_OPTIONS}}{{#OPTION_6001}}{{#OPTION_6001_0}}
+	{{SERVICE_NAME}}Service m_{{SERVICE_NAME}}Service;
+	{{/OPTION_6001_0}}{{/OPTION_6001}}{{/SERVICE_OPTIONS}}{{/SERVICES}}
 };
 
 {{#PACKAGES}}} // namespace {{PACKAGE_NAME}}

@@ -36,7 +36,7 @@ create() {
 	DATE=`date +%D`
 	mkdir $2
 
-	echo "//" >> $2/$2.proto
+	echo "//" > $2/$2.proto
 	echo "//   $2 Service" >> $2/$2.proto
 	echo "//" >> $2/$2.proto
 	echo "//   DESCRIPTION: " >> $2/$2.proto
@@ -55,7 +55,7 @@ create() {
 	echo "" >> $2/$2.proto
 	echo "" >> $2/$2.proto
 
-	echo ".swp" >> $2/.gitignore
+	echo ".swp" > $2/.gitignore
 
 	echo "Create $2 Service Success"
 }
@@ -121,7 +121,7 @@ build() {
 	mkdir -p $RPC_CONFIG
 
 	DATE=`date +%D`
-	echo "#" >> "$RPC_CONFIG/$SERVICE_NAME.conf"
+	echo "#" > "$RPC_CONFIG/$SERVICE_NAME.conf"
 	echo "#   $SERVICE_NAME Service Configure" >> "$RPC_CONFIG/$SERVICE_NAME.conf"
 	echo "#" >> "$RPC_CONFIG/$SERVICE_NAME.conf"
 	echo "#   DESCRIPTION: " >> "$RPC_CONFIG/$SERVICE_NAME.conf"

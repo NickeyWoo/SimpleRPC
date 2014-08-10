@@ -4,7 +4,7 @@
  *
  *  DESCRIPTION: 
  *  AUTHOR: NickeyWoo
- *  DATE: 2014/8/9
+ *  DATE: 2014/8/10
  *
 --*/
 #include <stdio.h>
@@ -45,7 +45,7 @@ class RPCGatewayApp :
 public:
     bool Initialize(int argc, char* argv[])
     {
-		if(!RegisterTcpServer(m_RPCGatewayService, "RPCGatewayInterface"))
+		if(!RegisterUdpServer<RPCGatewayService>("RPCGatewayInterface"))
             return false;
 		
 		// Initialize code
@@ -53,8 +53,6 @@ public:
 
         return true;
     }
-
-	RPCGatewayService m_RPCGatewayService;
 	
 };
 

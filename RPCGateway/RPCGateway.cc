@@ -4,7 +4,7 @@
  *
  *  DESCRIPTION: 
  *  AUTHOR: NickeyWoo
- *  DATE: 2014/8/9
+ *  DATE: 2014/8/10
  *
 --*/
 #include <stdio.h>
@@ -46,7 +46,6 @@ RPCGateway::RPCGateway() :
 
 RPCGateway::~RPCGateway()
 {
-	Disconnect();
 }
 
 ::CommandSetupInfo RPCGateway::Setup(::CommandInfo& in)
@@ -65,17 +64,7 @@ RPCGateway::~RPCGateway()
 		if(dwRetryTimes > 3)
 			throw RPCServiceException(E_UNAVAILABLE, "service unavailable");
 
-		if(dwRetryTimes > 0 || !this->IsConnected())
-		{
-			Disconnect();
-			m_stLoadBalance.Route(&addr);
-			if(!ConnectService(addr))
-			{
-				m_stLoadBalance.Failure(&addr);
-				++dwRetryTimes;
-				continue;
-			}
-		}
+		m_stLoadBalance.Route(&addr);
 
 		RPCProtocol stRequestMsg;
 		stRequestMsg.Head.set_version(m_dwVersion);
@@ -90,7 +79,7 @@ RPCGateway::~RPCGateway()
 
 		IOBuffer stOutBuf(buffer, 65535);
 		stOutBuf << stRequestMsg;
-		this->Send(stOutBuf);
+		this->Send(stOutBuf, addr);
 
 		timeval tv;
 		bzero(&tv, sizeof(timeval));
@@ -114,9 +103,6 @@ RPCGateway::~RPCGateway()
 	}
 	while(true);
 
-	// short connection
-	Disconnect();
-
 	++m_ddwSequence;
 
 	RPCProtocol stResponseMsg;
@@ -134,18 +120,7 @@ RPCGateway::~RPCGateway()
     ::CommandSetupInfo out;
 	out.ParseFromString(stResponseMsg.Body);
     return out;
-}
 
-
-bool RPCGateway::ConnectService(sockaddr_in& addr)
-{
-	this->Connect(addr);
-
-	timeval tv;
-	bzero(&tv, sizeof(timeval));
-	tv.tv_usec = 100000;
-
-	return (0 != PoolObject<EventScheduler>::Instance().Wait(this, EventScheduler::PollType::POLLOUT, &tv));
 }
 
 void RPCGateway::OnMessage(ChannelType& channel, IOBuffer& in)
@@ -155,22 +130,5 @@ void RPCGateway::OnMessage(ChannelType& channel, IOBuffer& in)
 	// receive service data
 	
 }
-
-void RPCGateway::OnConnected(ChannelType& channel)
-{
-    LOG("[%s:%d] connected.", inet_ntoa(channel.address.sin_addr), ntohs(channel.address.sin_port));
-
-    // client connected service
-
-}
-
-void RPCGateway::OnDisconnected(ChannelType& channel)
-{
-    LOG("[%s:%d] disconnected.", inet_ntoa(channel.address.sin_addr), ntohs(channel.address.sin_port));
-
-    // client connected service
-
-}
-
 
 

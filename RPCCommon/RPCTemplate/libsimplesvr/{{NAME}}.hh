@@ -3,7 +3,7 @@
  *  !!AUTO GENERATE CODE!!
  *
  *  DESCRIPTION: 
- *  AUTHOR: {{#OPTIONS}}{{#OPTION_5001}}{{OPTION_VALUE}}{{/OPTION_5001}}{{/OPTIONS}}
+ *  AUTHOR: {{#FILE_OPTIONS}}{{#OPTION_5001}}{{OPTION_VALUE}}{{/OPTION_5001}}{{/FILE_OPTIONS}}
  *  DATE: {{#DATE}}{{YEAR}}/{{MONTH}}/{{DAY}}{{/DATE}}
  *
 --*/
@@ -15,7 +15,7 @@
 #include "Channel.hpp"
 #include "IOBuffer.hpp"
 #include "Server.hpp"
-#include "TcpClient.hpp"
+{{#SERVICES}}{{#SERVICE_OPTIONS}}{{#OPTION_6001}}{{#OPTION_6001_0}}#include "TcpClient.hpp"{{/OPTION_6001_0}}{{#OPTION_6001_1}}#include "UdpServer.hpp"{{/OPTION_6001_1}}{{/OPTION_6001}}{{/SERVICE_OPTIONS}}{{/SERVICES}}
 #include "LoadBalance.hpp"
 
 #include "RPCProto/RPCProto.pb.h"
@@ -25,18 +25,18 @@
 {{#PACKAGES}}namespace {{PACKAGE_NAME}} {
 {{/PACKAGES}}
 {{#SERVICES}}class {{SERVICE_NAME}} :
-    public TcpClient<{{SERVICE_NAME}}, void>
+{{#SERVICE_OPTIONS}}{{#OPTION_6001}}    public {{#OPTION_6001_0}}TcpClient{{/OPTION_6001_0}}{{#OPTION_6001_1}}UdpServer{{/OPTION_6001_1}}<{{SERVICE_NAME}}, void>{{/OPTION_6001}}{{/SERVICE_OPTIONS}}
 {
 public:
 	{{SERVICE_NAME}}();
 	~{{SERVICE_NAME}}();
-	bool ConnectService(sockaddr_in& addr);
-
+{{#SERVICE_OPTIONS}}{{#OPTION_6001}}{{#OPTION_6001_0}}	bool ConnectService(sockaddr_in& addr);
+{{/OPTION_6001_0}}{{/OPTION_6001}}{{/SERVICE_OPTIONS}}
 	{{#METHODS}}{{#OUTPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/OUTPUT_TYPE}} {{METHOD_NAME}}({{#INPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/INPUT_TYPE}}& in);
 	{{/METHODS}}
     void OnMessage(ChannelType& channel, IOBuffer& in);
-    void OnConnected(ChannelType& channel);
-    void OnDisconnected(ChannelType& channel);
+{{#SERVICE_OPTIONS}}{{#OPTION_6001}}{{#OPTION_6001_0}}        void OnConnected(ChannelType& channel);
+    void OnDisconnected(ChannelType& channel);{{/OPTION_6001_0}}{{/OPTION_6001}}{{/SERVICE_OPTIONS}}
 
 private:
 	bool m_bLoadConfigure;
