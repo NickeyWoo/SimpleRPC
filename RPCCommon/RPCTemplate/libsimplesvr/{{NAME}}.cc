@@ -115,6 +115,9 @@
 	}
 	while(true);
 
+	// short connection
+	Disconnect();
+
 	++m_ddwSequence;
 
 	RPCProtocol stResponseMsg;

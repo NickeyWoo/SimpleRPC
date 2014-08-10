@@ -4,7 +4,7 @@
  *
  *  DESCRIPTION: 
  *  AUTHOR: NickeyWoo
- *  DATE: 2014/8/6
+ *  DATE: 2014/8/9
  *
 --*/
 #include <stdio.h>
@@ -113,6 +113,9 @@ RPCGateway::~RPCGateway()
 		break;
 	}
 	while(true);
+
+	// short connection
+	Disconnect();
 
 	++m_ddwSequence;
 

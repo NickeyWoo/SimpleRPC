@@ -4,7 +4,7 @@
  *
  *  DESCRIPTION: 
  *  AUTHOR: NickeyWoo
- *  DATE: 2014/8/6
+ *  DATE: 2014/8/9
  *
 --*/
 #include <stdio.h>
@@ -70,8 +70,8 @@ void RPCGatewayService::OnMessage(ChannelType& channel, IOBuffer& in)
             }
             break;
         default:
-			{
-			}
+            throw RPCUnknownProtocolException((boost::format("unknown CommandCode(0x%04X)") 
+											  % dwCommandCode).str());
             break;
         }
     }
