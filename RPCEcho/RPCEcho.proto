@@ -19,7 +19,6 @@ message EchoResponse {
 }
 
 service RPCEcho {
-	option(Socket) = UDP;
 
 	rpc Echo(EchoRequest) returns(EchoResponse) {
 		option(CommandCode) = "0xFF01";

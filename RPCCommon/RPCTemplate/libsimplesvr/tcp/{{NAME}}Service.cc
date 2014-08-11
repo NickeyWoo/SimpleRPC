@@ -93,7 +93,7 @@
     out << stResponseMsg;
     channel << out;
 }
-{{#SERVICE_OPTIONS}}{{#OPTION_6001}}{{#OPTION_6001_0}}
+
 void {{SERVICE_NAME}}Service::OnConnected(ChannelType& channel)
 {
     LOG("client [%s:%d] connected.", inet_ntoa(channel.address.sin_addr), ntohs(channel.address.sin_port));
@@ -109,7 +109,7 @@ void {{SERVICE_NAME}}Service::OnDisconnected(ChannelType& channel)
     // client connected service
 
 }
-{{/OPTION_6001_0}}{{/OPTION_6001}}{{/SERVICE_OPTIONS}}
+
 {{#METHODS}}void {{SERVICE_NAME}}Service::On{{METHOD_NAME}}(ChannelType& channel, {{#INPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/INPUT_TYPE}}& in, {{#OUTPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/OUTPUT_TYPE}}& out)
 {
     // implement rpc logic

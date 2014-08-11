@@ -97,7 +97,7 @@ build() {
 	TEMPLATENAME=$2
 	if [ "$TEMPLATENAME" = "" ]
 	then
-		TEMPLATENAME="libsimplesvr"
+		TEMPLATENAME="libsimplesvr/udp"
 	fi
 
 	TEMPLATE_PATH="$PROJ_BASEPATH/RPCCommon/RPCTemplate/$TEMPLATENAME"

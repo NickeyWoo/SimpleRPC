@@ -15,7 +15,7 @@
 #include "Channel.hpp"
 #include "IOBuffer.hpp"
 #include "Server.hpp"
-{{#SERVICES}}{{#SERVICE_OPTIONS}}{{#OPTION_6001}}{{#OPTION_6001_0}}#include "TcpClient.hpp"{{/OPTION_6001_0}}{{#OPTION_6001_1}}#include "UdpServer.hpp"{{/OPTION_6001_1}}{{/OPTION_6001}}{{/SERVICE_OPTIONS}}{{/SERVICES}}
+#include "UdpServer.hpp"
 #include "LoadBalance.hpp"
 
 #include "RPCProto/RPCProto.pb.h"
@@ -25,18 +25,15 @@
 {{#PACKAGES}}namespace {{PACKAGE_NAME}} {
 {{/PACKAGES}}
 {{#SERVICES}}class {{SERVICE_NAME}} :
-{{#SERVICE_OPTIONS}}{{#OPTION_6001}}    public {{#OPTION_6001_0}}TcpClient{{/OPTION_6001_0}}{{#OPTION_6001_1}}UdpServer{{/OPTION_6001_1}}<{{SERVICE_NAME}}, void>{{/OPTION_6001}}{{/SERVICE_OPTIONS}}
+    public UdpServer<{{SERVICE_NAME}}, void>
 {
 public:
 	{{SERVICE_NAME}}();
 	~{{SERVICE_NAME}}();
-{{#SERVICE_OPTIONS}}{{#OPTION_6001}}{{#OPTION_6001_0}}	bool ConnectService(sockaddr_in& addr);
-{{/OPTION_6001_0}}{{/OPTION_6001}}{{/SERVICE_OPTIONS}}
+
 	{{#METHODS}}{{#OUTPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/OUTPUT_TYPE}} {{METHOD_NAME}}({{#INPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/INPUT_TYPE}}& in);
 	{{/METHODS}}
     void OnMessage(ChannelType& channel, IOBuffer& in);
-{{#SERVICE_OPTIONS}}{{#OPTION_6001}}{{#OPTION_6001_0}}        void OnConnected(ChannelType& channel);
-    void OnDisconnected(ChannelType& channel);{{/OPTION_6001_0}}{{/OPTION_6001}}{{/SERVICE_OPTIONS}}
 
 private:
 	bool m_bLoadConfigure;

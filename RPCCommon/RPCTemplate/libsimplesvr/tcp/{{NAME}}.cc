@@ -46,11 +46,10 @@
 }
 
 {{SERVICE_NAME}}::~{{SERVICE_NAME}}()
-{{{#SERVICE_OPTIONS}}{{#OPTION_6001}}{{#OPTION_6001_0}}
-	Disconnect();{{/OPTION_6001_0}}{{/OPTION_6001}}{{/SERVICE_OPTIONS}}
+{
+	Disconnect();
 }
 
-{{#SERVICE_OPTIONS}}{{#OPTION_6001}}{{#OPTION_6001_0}}
 {{#METHODS}}{{#OUTPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/OUTPUT_TYPE}} {{SERVICE_NAME}}::{{METHOD_NAME}}({{#INPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/INPUT_TYPE}}& in)
 {
 	if(!m_bLoadConfigure)
@@ -164,81 +163,7 @@ void {{SERVICE_NAME}}::OnDisconnected(ChannelType& channel)
     // client connected service
 
 }
-{{/OPTION_6001_0}}{{#OPTION_6001_1}}{{#METHODS}}{{#OUTPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/OUTPUT_TYPE}} {{SERVICE_NAME}}::{{METHOD_NAME}}({{#INPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/INPUT_TYPE}}& in)
-{
-	if(!m_bLoadConfigure)
-		throw RPCServiceException(E_INTERNALERROR, "load RPC configure failure");
 
-	char buffer[65535];
-	IOBuffer stInBuf(buffer, 65535);
-	uint32_t dwRetryTimes = 0;
-
-	sockaddr_in addr;
-	bzero(&addr, sizeof(sockaddr_in));
-	do
-	{
-		if(dwRetryTimes > 3)
-			throw RPCServiceException(E_UNAVAILABLE, "service unavailable");
-
-		m_stLoadBalance.Route(&addr);
-
-		RPCProtocol stRequestMsg;
-		stRequestMsg.Head.set_version(m_dwVersion);
-		stRequestMsg.Head.set_sequence(m_ddwSequence);
-		stRequestMsg.Head.set_timestamp(time(NULL));
-
-		RPCCommand* pCommand = stRequestMsg.Head.mutable_command();
-		pCommand->set_commandcode({{#METHOD_OPTIONS}}{{#OPTION_7001}}{{OPTION_VALUE}}{{/OPTION_7001}}{{/METHOD_OPTIONS}});
-		pCommand->set_resultcode(0);
-
-		stRequestMsg.Body = in.SerializeAsString();
-
-		IOBuffer stOutBuf(buffer, 65535);
-		stOutBuf << stRequestMsg;
-		this->Send(stOutBuf, addr);
-
-		timeval tv;
-		bzero(&tv, sizeof(timeval));
-		tv.tv_usec = 100000; // 100ms timeout
-		if(0 == PoolObject<EventScheduler>::Instance().Wait(this, EventScheduler::PollType::POLLIN, &tv))
-		{
-			m_stLoadBalance.Failure(&addr);
-			++dwRetryTimes;
-			continue;
-		}
-
-		if(this->Recv(stInBuf) == 0)
-		{
-			m_stLoadBalance.Failure(&addr);
-			++dwRetryTimes;
-			continue;
-		}
-
-		m_stLoadBalance.Success(&addr);
-		break;
-	}
-	while(true);
-
-	++m_ddwSequence;
-
-	RPCProtocol stResponseMsg;
-	stInBuf >> stResponseMsg;
-
-	RPCCommand stCommand = stResponseMsg.Head.command();
-	if(stCommand.resultcode() != 0)
-	{
-		std::string strErrorMsg;
-		if(stCommand.has_resultmessage())
-			strErrorMsg = stCommand.resultmessage();
-		throw RPCServiceException(stResponseMsg.Head.command().resultcode(), strErrorMsg);
-	}
-
-    {{#OUTPUT_TYPE}}::{{#PACKAGES}}{{PACKAGE_NAME}}::{{/PACKAGES}}{{TYPE_NAME}}{{/OUTPUT_TYPE}} out;
-	out.ParseFromString(stResponseMsg.Body);
-    return out;
-
-}
-{{/METHODS}}{{/OPTION_6001_1}}{{/OPTION_6001}}{{/SERVICE_OPTIONS}}
 void {{SERVICE_NAME}}::OnMessage(ChannelType& channel, IOBuffer& in)
 {
     LOG("receive [%s:%d] message.", inet_ntoa(channel.address.sin_addr), ntohs(channel.address.sin_port));
