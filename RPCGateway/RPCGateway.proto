@@ -17,7 +17,6 @@ message EndPoint {
 
 message CommandInfo {
 	required uint32 CommandCode = 1;
-	repeated EndPoint EndPoints = 2;
 }
 
 message CommandSetupInfo {

@@ -4,7 +4,7 @@
  *
  *  DESCRIPTION: 
  *  AUTHOR: NickeyWoo
- *  DATE: 2014/8/10
+ *  DATE: 2014/8/11
  *
 --*/
 #include <stdio.h>
@@ -53,7 +53,7 @@ public:
 
         return true;
     }
-	
+
 };
 
 

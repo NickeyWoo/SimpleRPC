@@ -4,7 +4,7 @@
  *
  *  DESCRIPTION: 
  *  AUTHOR: NickeyWoo
- *  DATE: 2014/8/10
+ *  DATE: 2014/8/11
  *
 --*/
 #ifndef __RPCGatewaySERVICE_HH__

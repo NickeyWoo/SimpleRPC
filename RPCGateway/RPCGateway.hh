@@ -4,7 +4,7 @@
  *
  *  DESCRIPTION: 
  *  AUTHOR: NickeyWoo
- *  DATE: 2014/8/10
+ *  DATE: 2014/8/11
  *
 --*/
 #ifndef __RPCGateway_HH__
@@ -33,7 +33,6 @@ public:
 	::CommandSetupInfo Setup(::CommandInfo& in);
 	
     void OnMessage(ChannelType& channel, IOBuffer& in);
-
 
 private:
 	bool m_bLoadConfigure;
