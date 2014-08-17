@@ -4,7 +4,7 @@
  *
  *  DESCRIPTION: 
  *  AUTHOR: NickeyWoo
- *  DATE: 2014/8/11
+ *  DATE: 2014/8/16
  *
 --*/
 #include <stdio.h>
@@ -23,43 +23,36 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#include <boost/format.hpp>
+
 #include <utility>
 #include <string>
 #include <vector>
 #include <map>
 
-#include <boost/format.hpp>
-
 #include "RPCGateway.hh"
 
-void Test_RPCGateway_Setup()
-{
-	::CommandInfo stIn;
+void Test_RPCGateway_Setup() {
+    ::CommandInfo stIn;
 
-	// set parameters
-	
+    // set parameters
 
-	::CommandSetupInfo stOut;
-	try
-	{
-		::RPCGateway stRpc;
-		stOut = stRpc.Setup(stIn);
-	}
-	catch(RPCServiceException& error)
-	{
-		printf("error(%u): %s\n", error.error(), error.what());
-		exit(0);
-	}
+    ::CommandSetupInfo stOut;
+    try {
+        ::RPCGateway stRpc;
+        stOut = stRpc.Setup(stIn);
+    } catch(RPCServiceException& error) {
+        printf("error(%u): %s\n", error.error(), error.what());
+        exit(0);
+    }
 
-	printf("send msg: %s", stIn.DebugString().c_str());
-	printf("recv msg: %s", stOut.DebugString().c_str());
+    printf("send msg: %s", stIn.DebugString().c_str());
+    printf("recv msg: %s", stOut.DebugString().c_str());
 }
 
 
-int main(int argc, char* argv[])
-{
-	Test_RPCGateway_Setup();
-	
+int main(int argc, char* argv[]) {
+    Test_RPCGateway_Setup();
     return 0;
 }
 

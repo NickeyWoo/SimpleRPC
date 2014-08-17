@@ -81,9 +81,13 @@ if ! [[ `cat ~/.bashrc | grep BLADE_AUTO_UPGRADE` ]]; then
 	echo -e "export BLADE_AUTO_UPGRADE=no" >> ~/.bashrc
 	echo -e "export PATH=\$PATH:$WORKSTATION/Tools/bin:$WORKSTATION/Tools/typhoon-blade/" >> ~/.bashrc
 	echo -e "test -s $WORKSTATION/Tools/typhoon-blade/bladefunctions && . $WORKSTATION/Tools/typhoon-blade/bladefunctions || true" >> ~/.bashrc
+	echo -e "alias b='blade build'" >> ~/.bashrc
+	echo -e "alias r='blade run'" >> ~/.bashrc
 	export BLADE_AUTO_UPGRADE=no
 	export PATH=$PATH:$WORKSTATION/Tools/bin:$WORKSTATION/Tools/typhoon-blade/
 	test -s $WORKSTATION/Tools/typhoon-blade/bladefunctions && . $WORKSTATION/Tools/typhoon-blade/bladefunctions || true
+	alias b='blade build'
+	alias r='blade run'
 fi
 
 echo "SimpleRPC 安装完毕"

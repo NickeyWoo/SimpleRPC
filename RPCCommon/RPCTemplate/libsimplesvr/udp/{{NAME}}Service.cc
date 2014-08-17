@@ -50,8 +50,8 @@
     {
         uint32_t dwCommandCode = stRequestMsg.Head.command().commandcode();
         LOG("receive client [%s:%d] message(CommandCode:0x%04X).", 
-                inet_ntoa(channel.address.sin_addr), 
-                ntohs(channel.address.sin_port),
+                inet_ntoa(channel.Address.sin_addr), 
+                ntohs(channel.Address.sin_port),
                 dwCommandCode);
 
         switch(dwCommandCode)

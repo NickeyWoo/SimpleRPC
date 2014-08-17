@@ -126,7 +126,7 @@
 {{/METHODS}}
 void {{SERVICE_NAME}}::OnMessage(ChannelType& channel, IOBuffer& in)
 {
-    LOG("receive [%s:%d] message.", inet_ntoa(channel.address.sin_addr), ntohs(channel.address.sin_port));
+    LOG("receive [%s:%d] message.", inet_ntoa(channel.Address.sin_addr), ntohs(channel.Address.sin_port));
 
 	// receive service data
 	

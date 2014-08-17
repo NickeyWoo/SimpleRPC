@@ -1,0 +1,39 @@
+//
+//	Kafka Message Queue
+//
+//	DESCRIPTION:
+//	AUTHOR: NickeyWoo
+//	DATE: 2014/08/16
+//
+
+package Kafka;
+
+message KafkaPushRequest
+{
+	required uint64 Sequence = 1;
+	required string Topic = 2;
+	required bytes Message = 3;
+}
+
+message KafkaPushResponse
+{
+	required uint64 Sequence = 1;
+	required uint32 MessageId = 3;
+}
+
+message KafkaPullRequest
+{
+	required uint64 Sequence = 1;
+	required string Topic = 2;
+	required string Group = 3;
+	required uint64 MessageId = 4;
+}
+
+message KafkaPullResponse
+{
+	required uint64 Sequence = 1;
+	required bytes Message = 2;
+	required uint64 NextMessageId = 3;
+}
+
+

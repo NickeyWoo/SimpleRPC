@@ -50,8 +50,8 @@
     {
         uint32_t dwCommandCode = stRequestMsg.Head.command().commandcode();
         LOG("receive client [%s:%d] message(CommandCode:0x%04X).", 
-                inet_ntoa(channel.address.sin_addr), 
-                ntohs(channel.address.sin_port),
+                inet_ntoa(channel.Address.sin_addr), 
+                ntohs(channel.Address.sin_port),
                 dwCommandCode);
 
         switch(dwCommandCode)
@@ -96,7 +96,7 @@
 
 void {{SERVICE_NAME}}Service::OnConnected(ChannelType& channel)
 {
-    LOG("client [%s:%d] connected.", inet_ntoa(channel.address.sin_addr), ntohs(channel.address.sin_port));
+    LOG("client [%s:%d] connected.", inet_ntoa(channel.Address.sin_addr), ntohs(channel.Address.sin_port));
 
     // client connected service
 
@@ -104,7 +104,7 @@ void {{SERVICE_NAME}}Service::OnConnected(ChannelType& channel)
 
 void {{SERVICE_NAME}}Service::OnDisconnected(ChannelType& channel)
 {
-    LOG("client [%s:%d] disconnected.", inet_ntoa(channel.address.sin_addr), ntohs(channel.address.sin_port));
+    LOG("client [%s:%d] disconnected.", inet_ntoa(channel.Address.sin_addr), ntohs(channel.Address.sin_port));
 
     // client connected service
 

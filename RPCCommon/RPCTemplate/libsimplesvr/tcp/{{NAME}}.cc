@@ -150,7 +150,7 @@
 
 void {{SERVICE_NAME}}::OnConnected(ChannelType& channel)
 {
-    LOG("[%s:%d] connected.", inet_ntoa(channel.address.sin_addr), ntohs(channel.address.sin_port));
+    LOG("[%s:%d] connected.", inet_ntoa(channel.Address.sin_addr), ntohs(channel.Address.sin_port));
 
     // client connected service
 
@@ -158,7 +158,7 @@ void {{SERVICE_NAME}}::OnConnected(ChannelType& channel)
 
 void {{SERVICE_NAME}}::OnDisconnected(ChannelType& channel)
 {
-    LOG("[%s:%d] disconnected.", inet_ntoa(channel.address.sin_addr), ntohs(channel.address.sin_port));
+    LOG("[%s:%d] disconnected.", inet_ntoa(channel.Address.sin_addr), ntohs(channel.Address.sin_port));
 
     // client connected service
 
@@ -166,7 +166,7 @@ void {{SERVICE_NAME}}::OnDisconnected(ChannelType& channel)
 
 void {{SERVICE_NAME}}::OnMessage(ChannelType& channel, IOBuffer& in)
 {
-    LOG("receive [%s:%d] message.", inet_ntoa(channel.address.sin_addr), ntohs(channel.address.sin_port));
+    LOG("receive [%s:%d] message.", inet_ntoa(channel.Address.sin_addr), ntohs(channel.Address.sin_port));
 
 	// receive service data
 	

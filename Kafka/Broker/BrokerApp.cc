@@ -1,10 +1,10 @@
 /*++
  *
- *  !!AUTO GENERATE CODE!!
+ *  Kafka Message Queue
  *
  *  DESCRIPTION: 
  *  AUTHOR: NickeyWoo
- *  DATE: 2014/8/16
+ *  DATE: 2014/8/15
  *
 --*/
 #include <stdio.h>
@@ -36,31 +36,22 @@
 #include "Timer.hpp"
 #include "Application.hpp"
 
-#include "RPCGatewayService.hh"
+#include "BrokerService.hh"
+#include "BrokerApp.hh"
 
-
-class RPCGatewayApp :
-    public Application<RPCGatewayApp>
+bool BrokerApp::Initialize(int argc, char* argv[])
 {
-public:
-    bool Initialize(int argc, char* argv[])
-    {
-		if(!RegisterUdpServer<RPCGatewayService>("RPCGatewayInterface"))
-            return false;
-		
-		// Initialize code
-        
+	if(!RegisterTcpServer(m_Service, "broker"))
+	{
+		printf("error: create broker service fail, %s\n", safe_strerror(errno));
+		return false;
+	}
 
-        return true;
-    }
+	std::map<std::string, std::string> stTimeoutMap = Configure::Get("timeout");
+	m_dwConnectionTimeout = strtoul(stTimeoutMap["connection"].c_str(), NULL, 10);
 
-};
+	return true;
+}
 
-
-
-AppRun(RPCGatewayApp);
-
-
-
-
+AppRun(BrokerApp)
 
