@@ -33,7 +33,7 @@ message KafkaPullResponse
 {
 	required uint64 Sequence = 1;
 	required bytes Message = 2;
-	required uint64 NextMessageId = 3;
+	required uint64 NextId = 3;
 }
 
 
